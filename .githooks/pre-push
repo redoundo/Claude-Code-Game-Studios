@@ -1,0 +1,18 @@
+#!/bin/bash
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+MATCHED_BRANCH=""
+
+for branch in develop main master; do
+    if [ "$CURRENT_BRANCH" = "$branch" ]; then
+        MATCHED_BRANCH="$branch"
+        break
+    fi
+done
+
+if [ -n "$MATCHED_BRANCH" ]; then
+    echo "Push to protected branch '$MATCHED_BRANCH' detected." >&2
+    echo "Reminder: Ensure build passes, tests pass, and no S1/S2 bugs exist." >&2
+fi
+
+exit 0

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Playtest Report"
+  short_description: "Generates a structured playtest report template or analyzes..."
+  default_prompt: "Use $playtest-report to generates a structured playtest report template or analyzes existing playtest notes into a structured format."
+policy:
+  allow_implicit_invocation: false

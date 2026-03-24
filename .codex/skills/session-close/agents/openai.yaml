@@ -1,0 +1,6 @@
+interface:
+  display_name: "Session Close"
+  short_description: "Archive active session state and append a session log for..."
+  default_prompt: "Use $session-close to archive active session state and append a session log for this Game Studios repo when you intentionally end a Codex work session."
+policy:
+  allow_implicit_invocation: false

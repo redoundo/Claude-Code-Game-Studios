@@ -1,0 +1,6 @@
+interface:
+  display_name: "Scope Check"
+  short_description: "Analyze a feature or sprint for scope creep by comparing..."
+  default_prompt: "Use $scope-check to analyze a feature or sprint for scope creep by comparing current scope against the original plan."
+policy:
+  allow_implicit_invocation: false

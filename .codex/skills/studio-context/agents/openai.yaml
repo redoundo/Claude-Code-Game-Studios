@@ -1,0 +1,6 @@
+interface:
+  display_name: "Studio Context"
+  short_description: "Load branch, sprint, active session state, and..."
+  default_prompt: "Use $studio-context to load branch, sprint, active session state, and documentation-gap context for this Game Studios repo before starting other work."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Setup Engine"
+  short_description: "Configure the project's game engine and version"
+  default_prompt: "Use $setup-engine to configure the project's game engine and version."
+policy:
+  allow_implicit_invocation: false

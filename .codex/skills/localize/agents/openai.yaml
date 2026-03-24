@@ -1,0 +1,6 @@
+interface:
+  display_name: "Localize"
+  short_description: "Run the localization workflow: extract strings, validate..."
+  default_prompt: "Use $localize to run the localization workflow: extract strings, validate localization readiness, check for hardcoded text, and generate translation-ready string tables."
+policy:
+  allow_implicit_invocation: false

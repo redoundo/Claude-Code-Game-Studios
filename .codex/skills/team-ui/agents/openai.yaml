@@ -1,0 +1,6 @@
+interface:
+  display_name: "Team UI"
+  short_description: "Orchestrate the UI team: coordinates ux-designer,..."
+  default_prompt: "Use $team-ui to orchestrate the UI team: coordinates ux-designer, ui-programmer, and art-director to design, implement, and polish a user interface feature from wireframe to final."
+policy:
+  allow_implicit_invocation: false

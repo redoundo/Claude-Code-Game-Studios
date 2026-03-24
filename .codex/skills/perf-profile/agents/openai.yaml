@@ -1,0 +1,6 @@
+interface:
+  display_name: "Perf Profile"
+  short_description: "Structured performance profiling workflow"
+  default_prompt: "Use $perf-profile to structured performance profiling workflow."
+policy:
+  allow_implicit_invocation: false

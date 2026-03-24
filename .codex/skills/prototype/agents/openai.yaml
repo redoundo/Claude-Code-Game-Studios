@@ -1,0 +1,6 @@
+interface:
+  display_name: "Prototype"
+  short_description: "Rapid prototyping workflow"
+  default_prompt: "Use $prototype to rapid prototyping workflow."
+policy:
+  allow_implicit_invocation: false

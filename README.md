@@ -1,9 +1,9 @@
 <p align="center">
   <h1 align="center">Claude Code Game Studios</h1>
   <p align="center">
-    Turn a single Claude Code session into a full game development studio.
+    Turn a single Claude Code or Codex session into a full game development studio.
     <br />
-    48 agents. 37 workflows. One coordinated AI team.
+    48 role profiles. 37 core workflows. One coordinated AI team.
   </p>
 </p>
 
@@ -33,7 +33,7 @@ The result: you still make every decision, but now you have a team that asks the
 
 - [What's Included](#whats-included)
 - [Studio Hierarchy](#studio-hierarchy)
-- [Slash Commands](#slash-commands)
+- [Commands & Skills](#commands--skills)
 - [Getting Started](#getting-started)
 - [Upgrading](#upgrading)
 - [Project Structure](#project-structure)
@@ -50,8 +50,8 @@ The result: you still make every decision, but now you have a team that asks the
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| **Agents** | 48 | Specialized subagents across design, programming, art, audio, narrative, QA, and production |
-| **Skills** | 37 | Slash commands for common workflows (`/start`, `/sprint-plan`, `/code-review`, `/brainstorm`, etc.) |
+| **Agents** | 48 | Specialized role definitions across design, programming, art, audio, narrative, QA, and production |
+| **Skills** | 37 | Core workflows available as Claude slash commands and Codex skills (`/start` or `$start`, `/sprint-plan` or `$sprint-plan`) |
 | **Hooks** | 8 | Automated validation on commits, pushes, asset changes, session lifecycle, agent audit, and gap detection |
 | **Rules** | 11 | Path-scoped coding standards enforced when editing gameplay, engine, AI, UI, network code, and more |
 | **Templates** | 29 | Document templates for GDDs, ADRs, sprint plans, economy models, faction design, and more |
@@ -90,9 +90,20 @@ The template includes agent sets for all three major engines. Use the set that m
 | **Unity** | `unity-specialist` | DOTS/ECS, Shaders/VFX, Addressables, UI Toolkit |
 | **Unreal Engine 5** | `unreal-specialist` | GAS, Blueprints, Replication, UMG/CommonUI |
 
-## Slash Commands
+## Commands & Skills
 
-Type `/` in Claude Code to access all 37 skills:
+Claude Code keeps the original slash commands. Codex uses the same workflow names as skills with a `$` prefix after bootstrap.
+
+**Claude Code**
+`/start` `/design-review` `/code-review` `/brainstorm` `/sprint-plan` `/team-combat`
+
+**Codex**
+`$start` `$design-review` `$code-review` `$brainstorm` `$sprint-plan` `$team-combat`
+
+The Codex layer also adds two helper skills for lifecycle work that Claude handled with session hooks:
+`$studio-context` `$session-close`
+
+Core workflow catalog:
 
 **Reviews & Analysis**
 `/design-review` `/code-review` `/balance-check` `/asset-audit` `/scope-check` `/perf-profile` `/tech-debt`
@@ -117,7 +128,9 @@ Type `/` in Claude Code to access all 37 skills:
 ### Prerequisites
 
 - [Git](https://git-scm.com/)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
+- One of:
+  - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
+  - Codex with a writable `$CODEX_HOME/skills` directory (defaults to `~/.codex/skills`)
 - **Recommended**: [jq](https://jqlang.github.io/jq/) (for hook validation) and Python 3 (for JSON validation)
 
 All hooks fail gracefully if optional tools are missing — nothing breaks, you just lose validation.
@@ -130,18 +143,45 @@ All hooks fail gracefully if optional tools are missing — nothing breaks, you 
    cd my-game
    ```
 
-2. **Open Claude Code** and start a session:
+2. **Pick your runtime**:
+
+   **Claude Code**
    ```bash
    claude
    ```
 
-3. **Run `/start`** — the system asks where you are (no idea, vague concept,
+   **Codex**
+   ```bash
+   python3 .codex/scripts/bootstrap.py
+   ```
+
+   What bootstrap does:
+   - syncs `.claude/skills/*` into `.codex/skills/*`
+   - generates Codex role profiles from `.claude/agents/*`
+   - installs the generated skills into `$CODEX_HOME/skills`
+   - configures `git` to use the repo's `.githooks/`
+
+3. **Start a session and run the entry workflow**:
+
+   **Claude Code**
+   ```bash
+   claude
+   ```
+
+   Then run `/start`.
+
+   **Codex**
+   - restart Codex after bootstrap so it picks up the installed skills
+   - optionally run `$studio-context` first to get the old session-start summary
+   - then run `$start`
+
+4. **Run `/start` or `$start`** — the system asks where you are (no idea, vague concept,
    clear design, existing work) and guides you to the right workflow. No assumptions.
 
    Or jump directly to a specific skill if you already know what you need:
-   - `/brainstorm` — explore game ideas from scratch
-   - `/setup-engine godot 4.6` — configure your engine if you already know
-   - `/project-stage-detect` — analyze an existing project
+   - `/brainstorm` or `$brainstorm` — explore game ideas from scratch
+   - `/setup-engine godot 4.6` or `$setup-engine godot 4.6` — configure your engine if you already know
+   - `/project-stage-detect` or `$project-stage-detect` — analyze an existing project
 
 ## Upgrading
 
@@ -165,6 +205,14 @@ CLAUDE.md                           # Master configuration
     agent-coordination-map.md       # Delegation and escalation paths
     setup-requirements.md           # Prerequisites and platform notes
     templates/                      # 28 document templates
+.codex/
+  scripts/
+    bootstrap.py                    # Sync, install, and git-hook setup for Codex
+    sync_from_claude.py             # Generates Codex skills and role profiles from Claude assets
+    install_skills.py               # Copies generated skills into $CODEX_HOME/skills
+  skills/                           # Generated Codex skills (37 core + 2 lifecycle helpers)
+  references/agents/                # Generated role profiles used by Codex subagents
+.githooks/                          # Git-native commit and push validation for Codex users
 src/                                # Game source code
 assets/                             # Art, audio, VFX, shaders, data files
 design/                             # GDDs, narrative docs, level designs
@@ -201,7 +249,7 @@ You stay in control. The agents provide structure and expertise, not autonomy.
 
 ### Automated Safety
 
-**Hooks** run automatically on every session:
+**Claude hooks** run automatically on every Claude Code session:
 
 | Hook | Trigger | What It Does |
 |------|---------|--------------|
@@ -215,6 +263,15 @@ You stay in control. The agents provide structure and expertise, not autonomy.
 | `log-agent.sh` | Agent spawned | Audit trail of all subagent invocations |
 
 **Permission rules** in `settings.json` auto-allow safe operations (git status, test runs) and block dangerous ones (force push, `rm -rf`, reading `.env` files).
+
+### Codex Runtime Layer
+
+Codex cannot consume Claude-only hooks, frontmatter, or custom agent types directly, so the repository now ships a Codex adapter layer:
+
+- `.codex/scripts/sync_from_claude.py` converts Claude skills into Codex skills and Claude agents into role prompt files
+- `.codex/scripts/install_skills.py` installs those skills into `$CODEX_HOME/skills`
+- `.githooks/pre-commit` and `.githooks/pre-push` preserve the most useful validation outside Claude
+- `$studio-context` and `$session-close` replace the old automatic session-start and session-stop behavior with explicit Codex skills
 
 ### Path-Scoped Rules
 
